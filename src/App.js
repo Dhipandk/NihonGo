@@ -39,7 +39,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar setCurrentRoom={setCurrentRoom} />
+      <NavBar setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
       {user ? (
         currentRoom ? (
           <ChatBox currentRoom={currentRoom} />
@@ -80,3 +80,21 @@ function App() {
 
 export default App;
 
+// App.js
+// import React, { useState } from "react";
+// import NavBar from "./components/NavBar";
+// import ChatBox from "./components/ChatBox";
+// import "./App.css";
+
+// function App() {
+//   const [currentRoom, setCurrentRoom] = useState(null);
+
+//   return (
+//     <div className="App">
+//       <NavBar setCurrentRoom={setCurrentRoom} currentRoom={currentRoom} />
+//       <ChatBox currentRoom={currentRoom} />
+//     </div>
+//   );
+// }
+
+// export default App;

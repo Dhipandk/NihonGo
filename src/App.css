@@ -213,7 +213,7 @@ input {
 }
 /* Overlay for modal */
 /* Overlay for modal */
-.modal-overlay {
+/* .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -227,7 +227,7 @@ input {
 }
 
 /* Create room and join room modals */
-.create-room,
+/* .create-room,
 .join-room {
   background-color: #1c1c1c;
   padding: 40px;
@@ -238,9 +238,9 @@ input {
   flex-direction: column;
   gap: 20px;
   max-width: 400px; /* Limit width for better readability */
-}
+/* } */ 
 
-.create-room input,
+/* .create-room input,
 .join-room button {
   padding: 15px 20px;
   border: none;
@@ -250,9 +250,9 @@ input {
   color: #ffffff;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
+} */
 
-.create-room input::placeholder {
+/* .create-room input::placeholder {
   color: #aaaaaa;
 }
 
@@ -277,4 +277,153 @@ input {
 
 .join-room button:hover {
   background-color: #5d8fa0;
+}  */
+
+/* Overlay for modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
 }
+
+/* Create room and join room modals */
+.create-room,
+.join-room {
+  background-color: #1c1c1c;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+}
+
+.create-room input,
+.join-room button {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #333333;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.create-room input::placeholder,
+.join-room input::placeholder {
+  color: #aaaaaa;
+}
+
+.create-room input:focus,
+.join-room input:focus,
+.join-room button:hover {
+  background-color: #4c768d;
+  color: #ffffff;
+  outline: none;
+}
+
+.create-room button[type="submit"],
+.join-room button[type="submit"] {
+  background-color: #4c768d;
+}
+
+.create-room button[type="submit"]:hover,
+.join-room button[type="submit"]:hover {
+  background-color: #5d8fa0;
+}
+
+.join-room input {
+  padding: 15px;
+}
+
+.join-room ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.join-room ul li {
+  margin: 10px 0;
+}
+
+.join-room ul li button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 15px;
+  background-color: #333333;
+}
+
+.join-room ul li button:hover {
+  background-color: #4c768d;
+}
+.welcome {
+  position: relative;
+  padding: 20px;
+}
+
+.language-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.language-toggle:hover {
+  background-color: #0056b3;
+}
+
+header {
+  text-align: center;
+}
+
+.sign-in img {
+  cursor: pointer;
+}
+
+/* .room-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.room-users {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.room-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.room-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.room-user p {
+  margin: 0;
+  font-size: 0.8em;
+} */
+

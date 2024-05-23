@@ -1,90 +1,49 @@
-// import React, { useState } from "react";
-// import GoogleSignin from "../img/btn_google_signin_dark_pressed_web.png";
-// import { auth } from "./Firebase";
-// import { useAuthState } from "react-firebase-hooks/auth";
-// import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
 
-// const NavBar = () => {
-//   const [user] = useAuthState(auth);
-//   const [menuVisible, setMenuVisible] = useState(false);
-
-//   const toggleMenu = () => {
-//     setMenuVisible(!menuVisible);
-//   };
-  
-
-//   const googleSignIn = () => {
-//     const provider = new GoogleAuthProvider();
-//     signInWithRedirect(auth, provider);
-//   };
-//   const signOut = () => {
-//     auth.signOut();
-//   };
-
-
-
-//   return (
-//     <nav className="nav-bar">
-//       <h1>Group Chat</h1>
-
-
-  
-
-//       {user ? (
-//         <>
-
-//             <button onClick={toggleMenu} className="menu-toggle" type="button">
-//           Menu
-//           </button>
-//           {menuVisible && (
-//             <ul className="menu">
-//               <li><button>Create Room</button></li>
-              
-//               <li><button onClick={signOut} type="button">
-//              Sign Out
-//           </button></li>
-
-//             </ul>
-//           )}
-//           </>
-//         //         <button onClick={signOut} className="sign-out" type="button">
-//         //   Sign Out
-//         // </button>
-     
-//       ) : (
-//         <button className="sign-in">
-//           <img
-//             onClick={googleSignIn}
-//             src={GoogleSignin}
-//             alt="sign in with google"
-//             type="button"
-//           />
-//         </button>
-//       )}
-//     </nav>
-//   );
-// };
-
-// export default NavBar;
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GoogleSignin from "../img/btn_google_signin_dark_pressed_web.png";
 import { auth, db } from "./Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, addDoc, serverTimestamp } from "firebase/firestore";
 
-const NavBar = ({ setCurrentRoom }) => {
+const NavBar = ({ currentRoom, setCurrentRoom }) => {
   const [user] = useAuthState(auth);
   const [menuVisible, setMenuVisible] = useState(false);
   const [createRoomVisible, setCreateRoomVisible] = useState(false);
   const [joinRoomVisible, setJoinRoomVisible] = useState(false);
   const [roomName, setRoomName] = useState("");
-  const [rooms, setRooms] = useState([]);
+  const [passKey, setPassKey] = useState("");
   const [selectedRoom, setSelectedRoom] = useState(null);
+  const [joinPassKey, setJoinPassKey] = useState("");
+  const [rooms, setRooms] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const q = query(collection(db, "rooms"));
+      const querySnapshot = await getDocs(q);
+      const roomsData = [];
+      querySnapshot.forEach((doc) => {
+        roomsData.push({ id: doc.id, ...doc.data() });
+      });
+      setRooms(roomsData);
+    };
+
+    fetchRooms();
+  }, []);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
+  };
+
+  const toggleCreateRoom = () => {
+    setCreateRoomVisible(!createRoomVisible);
+    setMenuVisible(false);
+  };
+
+  const toggleJoinRoom = () => {
+    setJoinRoomVisible(!joinRoomVisible);
+    setMenuVisible(false);
   };
 
   const googleSignIn = () => {
@@ -94,44 +53,44 @@ const NavBar = ({ setCurrentRoom }) => {
 
   const signOut = () => {
     auth.signOut();
+    setCurrentRoom(null); // Clear the current room on sign out
   };
 
   const createRoom = async () => {
-    if (roomName.trim() === "") {
-      alert("Enter valid room name");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "rooms"), {
+    if (roomName.trim() && passKey.trim()) {
+      const roomRef = await addDoc(collection(db, "rooms"), {
         name: roomName,
+        passKey: passKey,
+        createdAt: serverTimestamp(),
+        createdBy: user.displayName,
       });
-      setCurrentRoom(roomName);
+      setCurrentRoom({ id: roomRef.id, name: roomName });
       setCreateRoomVisible(false);
-      setMenuVisible(false);
-    } catch (error) {
-      console.error("Error creating room: ", error);
+      setRoomName("");
+      setPassKey("");
+    } else {
+      alert("Please enter both room name and pass key.");
     }
   };
 
-  const showJoinRoom = async () => {
-    const querySnapshot = await getDocs(collection(db, "rooms"));
-    const roomsList = querySnapshot.docs.map((doc) => doc.data().name);
-    setRooms(roomsList);
-    setJoinRoomVisible(true);
-    setMenuVisible(false);
+  const joinRoom = () => {
+    if (joinPassKey === selectedRoom.passKey) {
+      setCurrentRoom(selectedRoom);
+      setJoinRoomVisible(false);
+      setSelectedRoom(null);
+      setJoinPassKey("");
+    } else {
+      alert("Invalid pass key. Please try again.");
+    }
   };
 
-  const selectRoom = (room) => {
-    setCurrentRoom(room);
-    setSelectedRoom(room);
-    setJoinRoomVisible(false);
-  };
+  const filteredRooms = rooms.filter((room) =>
+    room.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <nav className="nav-bar">
-      <h1>NihonGo</h1>
-
+      <h1>{currentRoom ? `Room: ${currentRoom.name}` : "NihonGo"}</h1>
       {user ? (
         <>
           <button onClick={toggleMenu} className="menu-toggle" type="button">
@@ -140,12 +99,10 @@ const NavBar = ({ setCurrentRoom }) => {
           {menuVisible && (
             <ul className="menu">
               <li>
-                <button onClick={() => setCreateRoomVisible(true)}>
-                  Create Room
-                </button>
+                <button onClick={toggleCreateRoom}>Create Room</button>
               </li>
               <li>
-                <button onClick={showJoinRoom}>Join Room</button>
+                <button onClick={toggleJoinRoom}>Join Room</button>
               </li>
               <li>
                 <button onClick={signOut} type="button">
@@ -153,32 +110,6 @@ const NavBar = ({ setCurrentRoom }) => {
                 </button>
               </li>
             </ul>
-          )}
-          {createRoomVisible && (
-            <div className="modal-overlay">
-              <div className="create-room">
-                <input
-                  type="text"
-                  placeholder="Enter room name"
-                  value={roomName}
-                  onChange={(e) => setRoomName(e.target.value)}
-                />
-                <button onClick={createRoom}>Create</button>
-                <button onClick={() => setCreateRoomVisible(false)}>Cancel</button>
-              </div>
-            </div>
-          )}
-          {joinRoomVisible && !selectedRoom && (
-            <div className="modal-overlay">
-              <div className="join-room">
-                {rooms.map((room) => (
-                  <button key={room} onClick={() => selectRoom(room)}>
-                    {room}
-                  </button>
-                ))}
-                <button onClick={() => setJoinRoomVisible(false)}>Cancel</button>
-              </div>
-            </div>
           )}
         </>
       ) : (
@@ -191,8 +122,74 @@ const NavBar = ({ setCurrentRoom }) => {
           />
         </button>
       )}
+
+      {createRoomVisible && (
+        <div className="modal-overlay">
+          <div className="create-room">
+            <h2>Create Room</h2>
+            <input
+              type="text"
+              placeholder="Enter room name"
+              value={roomName}
+              onChange={(e) => setRoomName(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Enter pass key"
+              value={passKey}
+              onChange={(e) => setPassKey(e.target.value)}
+            />
+            <button onClick={createRoom}>Create</button>
+            <button onClick={() => setCreateRoomVisible(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {joinRoomVisible && (
+        <div className="modal-overlay">
+          <div className="join-room">
+            <h2>Join Room</h2>
+            {selectedRoom ? (
+              <>
+                <p>Enter pass key for room: {selectedRoom.name}</p>
+                <input
+                  type="password"
+                  placeholder="Enter pass key"
+                  value={joinPassKey}
+                  onChange={(e) => setJoinPassKey(e.target.value)}
+                />
+                <button onClick={joinRoom}>Join</button>
+                <button onClick={() => setSelectedRoom(null)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Search rooms"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <ul>
+                  {filteredRooms.map((room) => (
+                    <li key={room.id}>
+                      <button onClick={() => setSelectedRoom(room)}>
+                        {room.name} - Created by {room.createdBy} on{" "}
+                        {room.createdAt.toDate().toLocaleString()}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={() => setJoinRoomVisible(false)}>Cancel</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
 
 export default NavBar;
+
+
+
