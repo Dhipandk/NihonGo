@@ -178,7 +178,10 @@ input {
   width: 100%;
   padding: 20px 30px;
   background-color: #333333; /* Dark grey background */
+  
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .send-message > input {
@@ -190,6 +193,7 @@ input {
   background-color: #4a4a4a; /* Slightly lighter grey background */
   color: #e0e0e0; /* Light grey text */
   font-size: 1rem;
+
 }
 
 .send-message > input:placeholder {
@@ -211,73 +215,6 @@ input {
   background-color: #4a4a4a; /* Slightly lighter grey background */
   font-weight: 600;
 }
-/* Overlay for modal */
-/* Overlay for modal */
-/* .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
-/* Create room and join room modals */
-/* .create-room,
-.join-room {
-  background-color: #1c1c1c;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 400px; /* Limit width for better readability */
-/* } */ 
-
-/* .create-room input,
-.join-room button {
-  padding: 15px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: #333333;
-  color: #ffffff;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-} */
-
-/* .create-room input::placeholder {
-  color: #aaaaaa;
-}
-
-.create-room input:focus,
-.join-room button:hover {
-  background-color: #4c768d;
-  color: #ffffff;
-  outline: none;
-}
-
-.create-room button[type="submit"] {
-  background-color: #4c768d;
-}
-
-.create-room button[type="submit"]:hover {
-  background-color: #5d8fa0;
-}
-
-.join-room button {
-  background-color: #4c768d;
-}
-
-.join-room button:hover {
-  background-color: #5d8fa0;
-}  */
 
 /* Overlay for modal */
 .modal-overlay {
@@ -375,7 +312,7 @@ input {
   padding: 20px;
 }
 
-.language-toggle {
+/* .language-toggle {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -385,6 +322,20 @@ input {
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+} */
+
+.language-toggle {
+  position: absolute;
+  top: 10px;
+  right: 120px; 
+/* Adjust based on the width of the menu button */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1; /* Ensure the language toggle button is above other elements */
 }
 
 .language-toggle:hover {
@@ -399,31 +350,36 @@ header {
   cursor: pointer;
 }
 
-/* .room-info {
-  text-align: center;
-  margin-bottom: 20px;
+
+
+.form-input__input {
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
-.room-users {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+.voice-message-controls {
+  margin-right: 10px;
 }
 
-.room-user {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.voice-record-button {
+  background-color: #007bff; /* Change to desired button color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.room-user img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.send-button {
+  background-color: #28a745; /* Change to desired button color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.room-user p {
-  margin: 0;
-  font-size: 0.8em;
-} */
-
+.sound-wave {
+  width: 50px; /* Adjust the width as needed */
+  height: 20px; /* Adjust the height as needed */
+}

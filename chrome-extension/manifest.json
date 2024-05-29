@@ -1,18 +1,18 @@
-
 {
   "manifest_version": 3,
-  "name": "NihonGo",
+  "name": "NihonGo Chat Application",
+  "description": "A chat application with real-time translation capabilities.",
   "version": "1.0",
-  "description": "A chat application that breaks language barriers.",
-  "permissions": [
-    "identity",
-    "storage",
-    "activeTab",
-    "tabs"
-  ],
 
+  "background": {
+    "service_worker": "service-worker.js"
+  },
   "action": {
-    "default_popup": "index.html",
-    "default_icon" : "icon.png"
-  }
+    "default_title":"click to open panel",
+    "default_icon":"icon.png"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "permissions": ["sidePanel","activeTab", "storage", "tabs"]
 }
