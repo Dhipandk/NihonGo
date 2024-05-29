@@ -211,7 +211,7 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const q = query(collection(db, "new rooms"));
+      const q = query(collection(db, "rooms"));
       const querySnapshot = await getDocs(q);
       const roomsData = [];
       querySnapshot.forEach((doc) => {
@@ -249,7 +249,7 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
 
   const createRoom = async () => {
     if (roomName.trim() && passKey.trim()) {
-      const roomRef = await addDoc(collection(db, "new rooms"), {
+      const roomRef = await addDoc(collection(db, "rooms"), {
         name: roomName,
         passKey: passKey,
         createdAt: serverTimestamp(),
