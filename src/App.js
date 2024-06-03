@@ -77,11 +77,15 @@ function App() {
                 </ol>
               </section>
             </main>
+       
           </div>
+          
+
         )
       ) : (
         <Welcome />
       )}
+
     </div>
   );
 }
