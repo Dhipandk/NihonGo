@@ -384,6 +384,3 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
 };
 
 export default NavBar;
-
-
-

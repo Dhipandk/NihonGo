@@ -1,0 +1,59 @@
+.language-preferences {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #333;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+.language-preferences h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #f1f1f1;
+}
+
+.language-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.language-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.language-group h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: #c1c1c1;
+}
+
+.language-group label {
+  font-size: 1rem;
+  color: #d1d1d1;
+}
+
+.language-group input[type="radio"] {
+  margin-right: 0.5rem;
+}
+
+.save-button {
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #444;
+  color: #f1f1f1;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.save-button:hover {
+  background-color: #555;
+}
