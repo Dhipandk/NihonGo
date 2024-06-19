@@ -3,7 +3,6 @@
   "name": "NihonGo",
   "description": "A chat application with real-time translation between English and Japanese and vice versa",
   "version": "1.0",
-
   "background": {
     "service_worker": "service-worker.js"
   },
@@ -11,7 +10,7 @@
     "128": "icon1.png"
   },
   "action": {
-    "default_title":"click to open panel",
+    "default_title": "click to open panel",
     "default_icon": {
       "128": "icon1.png"
     }
@@ -19,5 +18,9 @@
   "side_panel": {
     "default_path": "popup.html"
   },
-  "permissions": ["sidePanel"]
+  "permissions": ["identity", "sidePanel"],
+  "oauth2": {
+    "client_id": "94716412668-k5guhv7g7kl0fk6sqr5756edn3mjoe45.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
+  }
 }

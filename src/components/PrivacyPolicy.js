@@ -92,11 +92,11 @@ const PrivacyPolicy = ({ language }) => {
         {language === 'en' ? (
           <>
             If you have any questions about this Privacy Policy, please contact us at
-            rams@vrarri.com.
+            thomas@vrarri.com.
           </>
         ) : (
           <>
-            このプライバシーポリシーに関するご質問がある場合は、rams@vrarri.com までお問い合わせください。
+            このプライバシーポリシーに関するご質問がある場合は、thomas@vrarri.com までお問い合わせください。
           </>
         )}
       </p>
