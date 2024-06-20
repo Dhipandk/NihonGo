@@ -432,11 +432,7 @@ header {
   background-color: #0056b3;
 }
 .edit-button{
-  width: 50%;
-  margin-top: 8px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 20%;
   background-color: #4a4a4a;
   color: #ffffff;
 }

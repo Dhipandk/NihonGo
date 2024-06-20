@@ -72,7 +72,8 @@ import React, { useState } from "react";
 import { auth, db } from "./Firebase"; // Assuming db is your Firestore instance
 import { useAuthState } from "react-firebase-hooks/auth";
 import { doc, updateDoc } from "firebase/firestore";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 const Message = ({ message }) => {
   const [user] = useAuthState(auth);
@@ -137,7 +138,9 @@ const Message = ({ message }) => {
             {message.text && <p className="received-message">{message.text}</p>}
             {message.translatedtext && <p className="received-message">{message.translatedtext}</p>}
             {isCurrentUserMessage && (
-              <button className="edit-button" onClick={handleEditClick}>Edit</button>
+              <button className="edit-button" onClick={handleEditClick}>
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
             )}
           </>
         )}
@@ -147,4 +150,5 @@ const Message = ({ message }) => {
 };
 
 export default Message;
+
 
