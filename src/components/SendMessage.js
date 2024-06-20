@@ -1,18 +1,92 @@
 
 
 // // SendMessage.js
+// import React, { useState } from "react";
+// import { auth, db } from "./Firebase";
+// import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+// import axios from 'axios';
+
+// const SendMessage = ({ scroll, currentRoom, preferences }) => {
+//   const [message, setMessage] = useState("");
+
+//   const sendMessage = async (event) => {
+//     event.preventDefault();
+
+//     if (message.trim() === "") {
+//       alert("Enter valid message");
+//       return;
+//     }
+
+//     const { uid, displayName, photoURL } = auth.currentUser;
+
+//     const response = await axios.post("https://exotic-celestyn-citchennai-3903b27e.koyeb.app/send-message", {
+//       message: message,
+//       displayName: displayName,
+//       uid: uid,
+//     });
+
+//     console.log("Response from Flask:", response.data);
+
+//     try {
+//       await addDoc(collection(db, "messages"), {
+//         text: message,
+//         name: displayName,
+//         avatar: photoURL,
+//         createdAt: serverTimestamp(),
+//         uid,
+//         roomId: currentRoom.id,
+//         translatedtext: response.data.message,
+//       });
+
+//       setMessage("");
+//       scroll.current.scrollIntoView({ behavior: "smooth" });
+//     } catch (error) {
+//       console.error("Error sending message:", error);
+//     }
+//   };
+
+//   return (
+//     <form onSubmit={sendMessage} className="send-message">
+//       <label htmlFor="messageInput" hidden>
+//         Enter Message
+//       </label>
+//       <input
+//         id="messageInput"
+//         name="messageInput"
+//         type="text"
+//         className="form-input__input"
+//         placeholder="type message..."
+//         value={message}
+//         onChange={(e) => setMessage(e.target.value)}
+//       />
+//       <button type="submit">Send</button>
+//     </form>
+//   );
+// };
+
+// export default SendMessage;
+
 import React, { useState } from "react";
 import { auth, db } from "./Firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import axios from 'axios';
+import axios from "axios";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
-const SendMessage = ({ scroll, currentRoom }) => {
+const SendMessage = ({ scroll, currentRoom, preferences }) => {
   const [message, setMessage] = useState("");
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
-  const sendMessage = async (event) => {
-    event.preventDefault();
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
 
-    if (message.trim() === "") {
+  const handleSendMessage = async (text) => {
+    if (text.trim() === "") {
       alert("Enter valid message");
       return;
     }
@@ -20,7 +94,7 @@ const SendMessage = ({ scroll, currentRoom }) => {
     const { uid, displayName, photoURL } = auth.currentUser;
 
     const response = await axios.post("https://exotic-celestyn-citchennai-3903b27e.koyeb.app/send-message", {
-      message: message,
+      message: text,
       displayName: displayName,
       uid: uid,
     });
@@ -29,7 +103,7 @@ const SendMessage = ({ scroll, currentRoom }) => {
 
     try {
       await addDoc(collection(db, "messages"), {
-        text: message,
+        text: text,
         name: displayName,
         avatar: photoURL,
         createdAt: serverTimestamp(),
@@ -42,6 +116,23 @@ const SendMessage = ({ scroll, currentRoom }) => {
       scroll.current.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Error sending message:", error);
+    }
+  };
+
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    await handleSendMessage(message);
+  };
+
+  const handleMicClick = () => {
+    const preferredLanguage = preferences.preferredLanguage; // Default to English if no preference
+
+    if (listening) {
+      SpeechRecognition.stopListening();
+      handleSendMessage(transcript);
+      resetTranscript();
+    } else {
+      SpeechRecognition.startListening({ continuous: true, language: preferredLanguage });
     }
   };
 
@@ -60,11 +151,17 @@ const SendMessage = ({ scroll, currentRoom }) => {
         onChange={(e) => setMessage(e.target.value)}
       />
       <button type="submit">Send</button>
+      <button type="button" onClick={handleMicClick}>
+        {listening ? "Stop" : "Mic"}
+      </button>
     </form>
   );
 };
 
 export default SendMessage;
+
+
+
 // SendMessage.js
 // import React, { useState } from "react";
 // import { auth, db } from "./Firebase";

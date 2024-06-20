@@ -3,14 +3,27 @@ import { auth, db } from "./Firebase";
 import { doc, setDoc } from "firebase/firestore";
 import "./LanguagePreferences.css";
 
-const LanguagePreferences = ({ setPreferences }) => {
+const LanguagePreferences = ({ setPreferences, language }) => {
   const [preferredLanguage, setPreferredLanguage] = useState("");
   const [translatedLanguage, setTranslatedLanguage] = useState("");
   const [error, setError] = useState("");
 
   const handleSavePreferences = async () => {
+    if (!preferredLanguage || !translatedLanguage) {
+      setError(
+        language === "en"
+          ? "**Please select both preferred language and translated language.**"
+          : "**優先言語と翻訳言語の両方を選択してください。**"
+      );
+      return;
+    }
+
     if (preferredLanguage === translatedLanguage) {
-      setError("Preferred language and translated language must not be the same.");
+      setError(
+        language === "en"
+          ? "**Preferred language and translated language must not be the same.**"
+          : "**優先言語と翻訳言語は同じであってはなりません。**"
+      );
       return;
     }
 
@@ -26,6 +39,7 @@ const LanguagePreferences = ({ setPreferences }) => {
     try {
       await setDoc(userDoc, preferences);
       setPreferences(preferences);
+      setError(""); // Clear error on successful save
     } catch (error) {
       console.error("Error saving preferences:", error);
     }
@@ -33,11 +47,18 @@ const LanguagePreferences = ({ setPreferences }) => {
 
   return (
     <div className="language-preferences">
-      <h1>Select your language preferences</h1>
-      {error && <p className="error-message">{error}</p>}
+      <center>
+        <h3>
+          {language === "en"
+            ? "Please Select your language preferences before creating or joining a room"
+            : "部屋を作成または参加する前に、言語設定を選択してください"}
+        </h3>
+      </center>
+      <br />
       <div className="language-options">
         <div>
-          <h2>Preferred Language</h2>
+          <h2>{language === "en" ? "Preferred Language" : "優先言語"}</h2>
+          <br />
           <label>
             <input
               type="radio"
@@ -45,20 +66,21 @@ const LanguagePreferences = ({ setPreferences }) => {
               checked={preferredLanguage === "en"}
               onChange={() => setPreferredLanguage("en")}
             />
-            English
+            {language === "en" ? "English" : "英語"}
           </label>
           <label>
             <input
               type="radio"
-              value="jp"
-              checked={preferredLanguage === "jp"}
-              onChange={() => setPreferredLanguage("jp")}
+              value="ja"
+              checked={preferredLanguage === "ja"}
+              onChange={() => setPreferredLanguage("ja")}
             />
-            Japanese
+            {language === "en" ? "Japanese" : "日本語"}
           </label>
         </div>
         <div>
-          <h2>Translated Language</h2>
+          <h2>{language === "en" ? "Translated Language" : "翻訳言語"}</h2>
+          <br />
           <label>
             <input
               type="radio"
@@ -66,20 +88,23 @@ const LanguagePreferences = ({ setPreferences }) => {
               checked={translatedLanguage === "en"}
               onChange={() => setTranslatedLanguage("en")}
             />
-            English
+            {language === "en" ? "English" : "英語"}
           </label>
           <label>
             <input
               type="radio"
-              value="jp"
-              checked={translatedLanguage === "jp"}
-              onChange={() => setTranslatedLanguage("jp")}
+              value="ja"
+              checked={translatedLanguage === "ja"}
+              onChange={() => setTranslatedLanguage("ja")}
             />
-            Japanese
+            {language === "en" ? "Japanese" : "日本語"}
           </label>
         </div>
       </div>
-      <button onClick={handleSavePreferences}>Save Preferences</button>
+      {error && <p className="error-message">{error}</p>}
+      <button className="save-button" onClick={handleSavePreferences}>
+        {language === "en" ? "Save Preferences" : "設定を保存"}
+      </button>
     </div>
   );
 };
