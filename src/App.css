@@ -27,6 +27,7 @@ input {
   background-color: #1c1c1c; /* Dark grey background */
   color: #e0e0e0; /* Light grey text */
   padding-top: 60px;
+  font-family: "Sawarabi Mincho";
 }
 
 /* Navbar */
@@ -114,7 +115,7 @@ input {
   padding: 30px;
   text-align: left;
   margin-top: 40px;
-  color: #e0e0e0; /* Light grey text */
+  color: #e0e0e0;
 }
 
 .welcome :is(h2, p, img) {

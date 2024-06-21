@@ -71,6 +71,8 @@ import { auth, db } from "./Firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import axios from "axios";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 
 const SendMessage = ({ scroll, currentRoom, preferences }) => {
   const [message, setMessage] = useState("");
@@ -124,16 +126,24 @@ const SendMessage = ({ scroll, currentRoom, preferences }) => {
     await handleSendMessage(message);
   };
 
-  const handleMicClick = () => {
+  const handleMicClick = async() => {
     const preferredLanguage = preferences.preferredLanguage; // Default to English if no preference
 
-    if (listening) {
-      SpeechRecognition.stopListening();
-      handleSendMessage(transcript);
-      resetTranscript();
-    } else {
-      SpeechRecognition.startListening({ continuous: true, language: preferredLanguage });
+    try {
+      if (listening) {
+        SpeechRecognition.stopListening();
+        await handleSendMessage(transcript);
+        
+        resetTranscript();
+      } else {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        SpeechRecognition.startListening({ continuous: true, language: preferredLanguage });
+      }
+    } catch (error) {
+      console.error("Error with speech recognition:", error);
     }
+
   };
 
   return (
@@ -152,8 +162,8 @@ const SendMessage = ({ scroll, currentRoom, preferences }) => {
       />
       <button type="submit">Send</button>
       <button type="button" onClick={handleMicClick}>
-        {listening ? "Stop" : "Mic"}
-      </button>
+      <FontAwesomeIcon icon={listening ? faMicrophone :faMicrophoneSlash } />
+    </button>
     </form>
   );
 };

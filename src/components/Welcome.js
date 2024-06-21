@@ -97,13 +97,13 @@ import GoogleSignin from "../img/btn_google_signin_dark_pressed_web.png";
 import { auth } from "./Firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
+
 const Welcome = () => {
   const [language, setLanguage] = useState("en");
 
   const toggleLanguage = () => {
     setLanguage((prevLanguage) => (prevLanguage === "en" ? "jp" : "en"));
   };
-
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
@@ -167,7 +167,7 @@ const Welcome = () => {
             </li>
           </ul>
         </section>
-        <section>
+        <section><br/>
           <h2>{language === "en" ? "Our Mission" : "私たちの使命"}</h2>
           <p>
             {language === "en"

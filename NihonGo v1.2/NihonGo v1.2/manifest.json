@@ -19,5 +19,5 @@
   "side_panel": {
     "default_path": "popup.html"
   },
-  "permissions": ["sidePanel"]
+  "permissions": ["microphone","sidePanel"]
 }

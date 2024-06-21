@@ -10,6 +10,7 @@ const PrivacyPolicy = ({ language }) => {
       maxWidth: '800px',
       margin: 'auto',
       marginTop: '20px',
+      fontFamily: language === 'en' ? 'inherit' :  'Sawarabi Mincho',
     },
     heading: {
       textAlign: 'center',
