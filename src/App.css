@@ -207,14 +207,18 @@ input {
 }
 
 .send-message > button {
-  width: 70px;
+  width: 60px;
   height: 40px;
-  padding: 5px 10px;
+  padding: 5px 5px;
   border-radius: 0 5px 5px 0;
   color: #dddada; /* Dark grey text */
   border: 1px solid #edebeb; /* Slightly lighter grey border */
   background-color: #4a4a4a; /* Slightly lighter grey background */
   font-weight: 600;
+}
+
+.send-message > button:hover {
+ background-color: #3a3a3a;
 }
 
 /* Overlay for modal */
@@ -313,17 +317,7 @@ input {
   padding: 20px;
 }
 
-/* .language-toggle {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-} */
+
 
 .language-toggle {
   position: absolute;
@@ -436,4 +430,41 @@ header {
   width: 20%;
   background-color: #4a4a4a;
   color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  margin-left: 10px;
 }
+
+.received-message.edited {
+  font-style: italic;
+  color: #0da9d4; /* or any other color to indicate it's edited */
+}
+
+
+
+.edited-indicator,
+.edited-indicator-left {
+  font-size: 12px;
+  color: #888;
+  margin-right: 5px;
+}
+
+.message-timestamp{
+  font-size: 12px;
+  color: #888;
+  margin-right: 5px;
+
+}
+.date-header {
+  width: 10%;
+  
+  background-color: #3578e4;
+  color: #ffffff;
+  text-align: center;
+  border: none;
+  margin: 30px auto;
+  border-radius: 4px;
+   /* Set the text color to white for better contrast */
+}
+
+

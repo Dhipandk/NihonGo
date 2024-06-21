@@ -160,8 +160,8 @@ const SendMessage = ({ scroll, currentRoom, preferences }) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <button type="submit">Send</button>
-      <button type="button" onClick={handleMicClick}>
+      <button className="send" type="submit">Send</button>
+      <button className="mic" type="button" onClick={handleMicClick}>
       <FontAwesomeIcon icon={listening ? faMicrophone :faMicrophoneSlash } />
     </button>
     </form>
