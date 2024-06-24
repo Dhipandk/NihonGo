@@ -20,7 +20,8 @@ const PrivacyPolicy = ({ language }) => {
     section: {
       marginBottom: '20px',
     },
-  };
+  }:
+  console.log('hello');
 
   return (
     <div className="privacy-policy" style={styles.privacyPolicyContainer}>
