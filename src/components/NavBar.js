@@ -389,19 +389,18 @@ import GoogleSignin from "../img/btn_google_signin_dark_pressed_web.png";
 import { auth, db } from "./Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { collection, getDocs, query, addDoc, serverTimestamp, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
 const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
   const [user] = useAuthState(auth);
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [createRoomVisible, setCreateRoomVisible] = useState(false);
-  const [joinRoomVisible, setJoinRoomVisible] = useState(false);
-  const [roomName, setRoomName] = useState("");
-  const [passKey, setPassKey] = useState("");
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [joinPassKey, setJoinPassKey] = useState("");
+  // const [createRoomVisible, setCreateRoomVisible] = useState(false);
+  // const [joinRoomVisible, setJoinRoomVisible] = useState(false);
+  // const [roomName, setRoomName] = useState("");
+  // const [passKey, setPassKey] = useState("");
+  // const [selectedRoom, setSelectedRoom] = useState(null);
+  // const [joinPassKey, setJoinPassKey] = useState("");
   const [rooms, setRooms] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -416,20 +415,6 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
 
     fetchRooms();
   }, []);
-
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
-
-  const toggleCreateRoom = () => {
-    setCreateRoomVisible(!createRoomVisible);
-    setMenuVisible(false);
-  };
-
-  const toggleJoinRoom = () => {
-    setJoinRoomVisible(!joinRoomVisible);
-    setMenuVisible(false);
-  };
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
@@ -454,63 +439,58 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
     setCurrentRoom(null); // Clear the current room on sign out
   };
 
-  const createRoom = async () => {
-    if (roomName.trim() && passKey.trim()) {
-      const roomRef = await addDoc(collection(db, "rooms"), {
-        name: roomName,
-        passKey: passKey,
-        createdAt: serverTimestamp(),
-        createdBy: user.displayName,
-      });
-      setCurrentRoom({ id: roomRef.id, name: roomName });
-      setCreateRoomVisible(false);
-      setRoomName("");
-      setPassKey("");
-    } else {
-      alert(language === "en" ? "Please enter both room name and pass key." : "ルーム名とパスキーを入力してください。");
-    }
+  // const createRoom = async () => {
+  //   if (roomName.trim() && passKey.trim()) {
+  //     const roomRef = await addDoc(collection(db, "rooms"), {
+  //       name: roomName,
+  //       passKey: passKey,
+  //       createdAt: serverTimestamp(),
+  //       createdBy: user.displayName,
+  //     });
+  //     setCurrentRoom({ id: roomRef.id, name: roomName });
+  //     setCreateRoomVisible(false);
+  //     setRoomName("");
+  //     setPassKey("");
+  //   } else {
+  //     alert(language === "en" ? "Please enter both room name and pass key." : "ルーム名とパスキーを入力してください。");
+  //   }
+  // };
+
+  // const joinRoom = () => {
+  //   if (joinPassKey === selectedRoom.passKey) {
+  //     setCurrentRoom(selectedRoom);
+  //     setJoinRoomVisible(false);
+  //     setSelectedRoom(null);
+  //     setJoinPassKey("");
+  //   } else {
+  //     alert(language === "en" ? "Invalid pass key. Please try again." : "無効なパスキーです。再試行してください。");
+  //   }
+  // };
+
+  const handleExit = () => {
+    setCurrentRoom(null);
   };
 
-  const joinRoom = () => {
-    if (joinPassKey === selectedRoom.passKey) {
-      setCurrentRoom(selectedRoom);
-      setJoinRoomVisible(false);
-      setSelectedRoom(null);
-      setJoinPassKey("");
-    } else {
-      alert(language === "en" ? "Invalid pass key. Please try again." : "無効なパスキーです。再試行してください。");
-    }
-  };
-
-  const filteredRooms = rooms.filter((room) =>
-    room.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredRooms = rooms.filter((room) =>
+  //   room.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
     <nav className="nav-bar">
       <h1>{currentRoom ? `${language === "en" ? "Room" : "ルーム"}: ${currentRoom.name}` : "NihonGo"}</h1>
       {user ? (
         <>
-          <button onClick={toggleMenu} className="menu-toggle" type="button">
-            {language === "en" ? "Menu" : "メニュー"}
-          </button>
           <button onClick={toggleLanguage} className="language-toggle">
             {language === "en" ? "日本語へ切り替える" : "Switch to English"}
           </button>
-          {menuVisible && (
-            <ul className="menu">
-              <li>
-                <button onClick={toggleCreateRoom}>{language === "en" ? "Create Room" : "ルームを作成する"}</button>
-              </li>
-              <li>
-                <button onClick={toggleJoinRoom}>{language === "en" ? "Join Room" : "ルームに参加する"}</button>
-              </li>
-              <li>
-                <button onClick={signOut} type="button">
-                  {language === "en" ? "Sign Out" : "サインアウト"}
-                </button>
-              </li>
-            </ul>
+          {currentRoom ? (
+            <button onClick={handleExit} className="menu-toggle">
+              {language === "en" ? "Exit" : "退出"}
+            </button>
+          ) : (
+            <button onClick={signOut} className="menu-toggle">
+              {language === "en" ? "Sign Out" : "サインアウト"}
+            </button>
           )}
         </>
       ) : (
@@ -524,7 +504,7 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
         </button>
       )}
 
-      {createRoomVisible && (
+      {/* {createRoomVisible && (
         <div className="modal-overlay">
           <div className="create-room">
             <h2>{language === "en" ? "Create Room" : "ルームを作成する"}</h2>
@@ -544,9 +524,9 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
             <button onClick={() => setCreateRoomVisible(false)}>{language === "en" ? "Cancel" : "キャンセル"}</button>
           </div>
         </div>
-      )}
+      )} */}
 
-      {joinRoomVisible && (
+      {/* {joinRoomVisible && (
         <div className="modal-overlay">
           <div className="join-room">
             <h2>{language === "en" ? "Join Room" : "ルームに参加する"}</h2>
@@ -585,9 +565,10 @@ const NavBar = ({ currentRoom, setCurrentRoom, language, toggleLanguage }) => {
             )}
           </div>
         </div>
-      )}
+      )} */}
     </nav>
   );
 };
 
 export default NavBar;
+
