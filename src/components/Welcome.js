@@ -125,14 +125,12 @@ const Welcome = () => {
   return (
     <main className="welcome">
       <header>
-        <h2>{language === "en" ? "Welcome to NihonGo." : "ようこそNihonGoへ。"}</h2>
         <button onClick={toggleLanguage} className="language-toggle">
           {language === "en" ? "日本語へ切り替える" : "Switch to English"}
         </button>
+        <br/><br/>
         <h1>
-          {language === "en"
-            ? "Welcome to Our Chat Application!"
-            : "私たちのチャットアプリケーションへようこそ！"}
+        {language === "en" ? "Welcome to NihonGo." : "ようこそNihonGoへ。"}
         </h1>
       </header>
       <main>
